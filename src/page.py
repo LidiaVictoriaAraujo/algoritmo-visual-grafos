@@ -4,6 +4,15 @@ from pyvis.network import Network
 import networkx as nx
 
 from src.grafos import make_grafo_aleatorio, make_grafo_manual, ler_html
+from src.busca import bfs_visual, dfs_visual, dijkstra_visual
+from src.componentes import componentes
+
+class Busca:
+        def __init__(self) -> None:
+            self.inicio = None
+            self.final = None
+            self.image_final = None
+            pass
 
 def page():
     st.title('Trabalho final da disciplina de Algoritmos em Grafos')
@@ -19,7 +28,7 @@ def modelagem():
         st.subheader('Grafo Aleatório')
         v = st.number_input(label='digite o número de vértices',step=1, key='vrand')
         a = st.number_input(label='digite o número de arestas', step=1, key='arand')
-        dir = st.toggle('Grafo direcionado', key='dirrand', value=True)
+        # dir = st.toggle('Grafo direcionado', key='dirrand', value=True)
         aleatorio = st.button('Gera Grafo Aleatório', use_container_width=True)
         if aleatorio:
             st.session_state.v = v
@@ -31,7 +40,7 @@ def modelagem():
         st.subheader('Grafo  Definido')
         v = st.number_input(label='digite o número de vértices',step=1, key='vman')
         text_arestas = st.text_area("Digite as combinações de arestas no formato 'vértice aresta'")
-        dir = st.toggle('Grafo direcionado', key='dirmand', value=True)
+        # dir = st.toggle('Grafo direcionado', key='dirmand', value=True)
         gera = st.button("Gerar Grafo", use_container_width=True)
         if gera:
             arestas = text_arestas.split('\n')
@@ -54,18 +63,73 @@ def modelagem():
 def busca():
     st.header('Buscar vértice no Grafo')
     st.write('Aqui você pode buscar um vértice no grafo gerado anteriormente. Digite o vértice que deseja buscar, o vértice inicial e selecione o tipo de busca que gostaria de fazer e clique em buscar.')
+
     if not st.session_state.grafo:
         st.write('Gere um grafo antes de buscar um vértice. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
     else:
+        busca = Busca()
         colin, colbusca = st.columns([1, 1])
         with colin:
             inicio = st.number_input(label='Digite o vértice inicial', step=1, key='inicio')
-            if inicio < 0 or inicio >= st.session_state.v:
-                st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
+            busca.inicio = inicio
         with colbusca:
-            busca = st.number_input(label='Digite o vértice que deseja buscar', step=1, key='busca')
-            if busca < 0 or busca >= st.session_state.v:
-                st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
+            fim = st.number_input(label='Digite o vértice que deseja buscar', step=1, key='busca')
+            busca.final = fim
         tipo = st.selectbox('Selecione o tipo de busca', ['Busca em Largura', 'Busca em Profundidade'])
+
         if st.button('Buscar', use_container_width=True):
-            pass
+            if busca.inicio < 0 or busca.inicio >= st.session_state.v:
+                st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
+            elif busca.final < 0 or busca.final >= st.session_state.v:
+                st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
+            else:
+                if tipo == 'Busca em Largura':
+                    pos = nx.spring_layout(st.session_state.grafo, seed=42)
+                    path, visited_nodes = bfs_visual(st.session_state.grafo, pos, busca.inicio, busca.final)
+                else:
+                    pos = nx.spring_layout(st.session_state.grafo, seed=42)
+                    path, visited_nodes = dfs_visual(st.session_state.grafo, pos, busca.inicio, busca.final)
+                if path:
+                    string=' -> '.join([str(node) for node in path])
+                    st.subheader(f'Caminho encontrado: {string}')
+                else:
+                    st.subheader('Caminho não encontrado')
+
+def mostra_componentes():
+    st.header('Cáclulo dos componentes do Grafo')
+    st.divider()
+    if not st.session_state.grafo:
+        st.write('Gere um grafo antes de encontrar os componentes. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
+    else:
+        n_componentes, grafo = componentes(grafo=st.session_state.grafo)
+        st.subheader(f'Este grafo contém {n_componentes} componentes')
+        components.html(ler_html(grafo), height=600)
+
+def caminho():
+    st.header('Caminho mínimo no Grafo')
+    st.write('Aqui você pode buscar o caminho mínimo entre dois vértices no grafo gerado anteriormente. Digite o vértice inicial e final e clique em buscar.')
+    if not st.session_state.grafo:
+        st.write('Gere um grafo antes de buscar um caminho. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
+    else:
+        busca = Busca()
+        colin, colbusca = st.columns([1, 1])
+        with colin:
+            inicio = st.number_input(label='Digite o vértice inicial', step=1, key='inicio')
+            busca.inicio = inicio
+        with colbusca:
+            fim = st.number_input(label='Digite o vértice que deseja buscar', step=1, key='busca')
+            busca.final = fim
+        if st.button('Buscar', use_container_width=True):
+            if busca.inicio < 0 or busca.inicio >= st.session_state.v:
+                st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
+            elif busca.final < 0 or busca.final >= st.session_state.v:
+                st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
+            else:
+                st.write('Buscando caminho mínimo entre os vértices', inicio, 'e', fim)
+                pos = nx.spring_layout(st.session_state.grafo, seed=42)
+                path, visited_nodes = dijkstra_visual(st.session_state.grafo, pos, busca.inicio, busca.final)
+                if path:
+                    string=' -> '.join([str(node) for node in path])
+                    st.subheader(f'Caminho mínimo encontrado: {string}')
+                else:
+                    st.subheader('Caminho mínimo não encontrado')
