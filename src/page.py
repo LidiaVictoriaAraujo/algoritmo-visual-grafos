@@ -28,7 +28,7 @@ def modelagem():
         st.subheader('Grafo Aleatório')
         v = st.number_input(label='digite o número de vértices',step=1, key='vrand')
         a = st.number_input(label='digite o número de arestas', step=1, key='arand')
-        # dir = st.toggle('Grafo direcionado', key='dirrand', value=True)
+        dir = st.toggle('Grafo direcionado', key='dirrand', value=True)
         aleatorio = st.button('Gera Grafo Aleatório', use_container_width=True)
         if aleatorio:
             st.session_state.v = v
@@ -40,7 +40,7 @@ def modelagem():
         st.subheader('Grafo  Definido')
         v = st.number_input(label='digite o número de vértices',step=1, key='vman')
         text_arestas = st.text_area("Digite as combinações de arestas no formato 'vértice aresta'")
-        # dir = st.toggle('Grafo direcionado', key='dirmand', value=True)
+        dir = st.toggle('Grafo direcionado', key='dirmand', value=True)
         gera = st.button("Gerar Grafo", use_container_width=True)
         if gera:
             arestas = text_arestas.split('\n')
@@ -56,7 +56,7 @@ def modelagem():
     #colocar divisória
     st.markdown('---')
     if st.session_state.grafo:
-        components.html(ler_html(st.session_state.grafo), height=600)
+        components.html(ler_html(st.session_state.grafo, dir=st.session_state.direcionado), height=600)
     else:
         st.write('Ainda não foi gerado um grafo')
 
@@ -96,14 +96,18 @@ def busca():
                     st.subheader('Caminho não encontrado')
 
 def mostra_componentes():
-    st.header('Cáclulo dos componentes do Grafo')
+    st.header('Cáclulo dos componentes fortemente conexos do Grafo')
+    st.write('Aqui você pode calcular os componentes fortemente conexos do grafo gerado anteriormente. Clique no botão abaixo para calcular os componentes.')
     st.divider()
-    if not st.session_state.grafo:
-        st.write('Gere um grafo antes de encontrar os componentes. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
-    else:
-        n_componentes, grafo = componentes(grafo=st.session_state.grafo)
-        st.subheader(f'Este grafo contém {n_componentes} componentes')
-        components.html(ler_html(grafo), height=600)
+    gerar = st.button('Calcular componentes', use_container_width=True)
+    if gerar:
+        if not st.session_state.grafo:
+            st.write('Gere um grafo antes de encontrar os componentes. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
+        else:
+            pos = nx.spring_layout(st.session_state.grafo, seed=42)
+            saidatexto, n_componentes = componentes(grafo=st.session_state.grafo, pos=pos)
+            st.subheader(f'Este grafo contém {n_componentes} componentes')
+            st.subheader(f'Sua representação por parênteses é dada por \n {saidatexto}')
 
 def caminho():
     st.header('Caminho mínimo no Grafo')

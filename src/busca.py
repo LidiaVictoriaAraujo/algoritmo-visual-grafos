@@ -6,7 +6,6 @@ from IPython.core.display import display, HTML, clear_output
 import streamlit.components.v1 as components
 import streamlit as st
 
-import tempfile
 
 def create_visual_graph(graph, pos, path=None, visited_nodes=None, queue_nodes=None, final=False):
     net = Network(cdn_resources='in_line')
