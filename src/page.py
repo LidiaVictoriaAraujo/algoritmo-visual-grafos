@@ -18,6 +18,12 @@ def page():
     st.title('Trabalho final da disciplina de Algoritmos em Grafos')
     st.write('Este é o trabalho de Grafos da disciplina de Algoritmos em Grafos. O algoritmo é implementado em Python e a interface gráfica é feita com o Streamlit.')
 
+    st.divider()
+
+    with open('docs/intro.html', 'r', encoding='utf-8') as f:
+        st.html(f.read())
+
+
 
 def modelagem():
     st.header('Modelagem do grafo')
@@ -76,6 +82,13 @@ def busca():
             fim = st.number_input(label='Digite o vértice que deseja buscar', step=1, key='busca')
             busca.final = fim
         tipo = st.selectbox('Selecione o tipo de busca', ['Busca em Largura', 'Busca em Profundidade'])
+
+        if tipo == 'Busca em Largura':
+            with open('docs/bfs_resumido.html', 'r', encoding='utf-8') as f:
+                st.html(f.read())
+        else:
+            with open('docs/dfs_resumido.html', 'r', encoding='utf-8') as f:
+                st.html(f.read())
 
         if st.button('Buscar', use_container_width=True):
             if busca.inicio < 0 or busca.inicio >= st.session_state.v:
