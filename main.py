@@ -31,3 +31,11 @@ elif pages == 'Cálculo de componentes':
     mostra_componentes()
 else:
     st.write("Selecione uma página no menu lateral")
+
+with open('docs/Documentação - Algoritmos em grafos.pdf', 'rb') as file:
+    st.sidebar.download_button('Clique aqui para baixar a documentação do projeto', 
+                               data=file, 
+                               file_name='Documentação - Algoritmo em grafos.pdf')
+    
+with open('docs/metodologia.html', 'r', encoding='utf-8') as f:
+        st.sidebar.html(f.read())
