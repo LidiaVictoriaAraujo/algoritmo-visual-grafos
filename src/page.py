@@ -70,7 +70,7 @@ def busca():
     global placeholder
     st.header('Buscar vértice no Grafo')
     st.write('Aqui você pode buscar um vértice no grafo gerado anteriormente. Digite o vértice que deseja buscar, o vértice inicial e selecione o tipo de busca que gostaria de fazer e clique em buscar.')
-
+    st.divider()
     if not st.session_state.grafo:
         st.write('Gere um grafo antes de buscar um vértice. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
     else:
@@ -112,20 +112,30 @@ def busca():
 def mostra_componentes():
     st.header('Cáclulo dos componentes fortemente conexos do Grafo')
     st.write('Aqui você pode calcular os componentes fortemente conexos do grafo gerado anteriormente. Clique no botão abaixo para calcular os componentes.')
+    with open('docs/componentes_resumido.html', 'r', encoding='utf-8') as f:
+                st.html(f.read())
     st.divider()
-    gerar = st.button('Calcular componentes', use_container_width=True)
-    if gerar:
-        if not st.session_state.grafo:
+    if not st.session_state.grafo:
             st.write('Gere um grafo antes de encontrar os componentes. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
-        else:
-            pos = nx.spring_layout(st.session_state.grafo, seed=42)
-            saidatexto, n_componentes = componentes(grafo=st.session_state.grafo, pos=pos)
-            st.subheader(f'Este grafo contém {n_componentes} componentes')
-            st.subheader(f'Sua representação por parênteses é dada por \n {saidatexto}')
+    elif st.session_state.direcionado == False:
+        st.write('O grafo gerado não é direcionado. Nesta aplicação não é possível calcular os componentes fortemente conexos de um grafo não direcionado.') 
+    else:
+        gerar = st.button('Calcular componentes', use_container_width=True)
+        if gerar:
+            if not st.session_state.grafo:
+                st.write('Gere um grafo antes de encontrar os componentes. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
+            else:
+                pos = nx.spring_layout(st.session_state.grafo, seed=42)
+                saidatexto, n_componentes = componentes(grafo=st.session_state.grafo, pos=pos)
+                st.subheader(f'Este grafo contém {n_componentes} componentes')
+                st.subheader(f'Sua representação por parênteses é dada por \n {saidatexto}')
 
 def caminho():
     st.header('Caminho mínimo no Grafo')
     st.write('Aqui você pode buscar o caminho mínimo entre dois vértices no grafo gerado anteriormente. Digite o vértice inicial e final e clique em buscar.')
+    with open('docs/caminho_resumido.html', 'r', encoding='utf-8') as f:
+                st.html(f.read())
+    st.divider()
     if not st.session_state.grafo:
         st.write('Gere um grafo antes de buscar um caminho. É possível gerar um grafo na opção Modelagem do Grafo no menu lateral.')
     else:

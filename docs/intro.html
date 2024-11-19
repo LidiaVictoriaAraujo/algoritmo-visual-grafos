@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Resumo</title>
+    <title>Fundamentação Teórica</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,7 +20,8 @@
     </style>
 </head>
 <body>
-    <h1>Resumo</h1>
+    <h1>Fundamentação Teórica</h1>
+    <h2>Resumo</h2>
     <p>Este trabalho pretende explorar o uso de algoritmos visuais de busca em grafos, abordando tanto os conceitos teóricos fundamentais quanto suas aplicações práticas. Grafos são estruturas amplamente utilizadas para representar problemas complexos, e os algoritmos de busca são essenciais para encontrar soluções eficientes dentro dessas estruturas. A visualização desses algoritmos, por meio de ferramentas gráficas, proporciona uma melhor compreensão dos processos envolvidos, facilitando o aprendizado e a análise de seu comportamento. O trabalho também abordará os desafios e limitações relacionados à visualização de grafos, considerando aspectos como escalabilidade e a precisão das representações gráficas.</p>
 
     <h2>1. Introdução</h2>
@@ -35,6 +36,17 @@
 
     <h2>2. O Problema de Busca em Grafos</h2>
     <p>O problema de busca em grafos consiste em encontrar um caminho entre dois vértices, a partir de um vértice inicial até um vértice alvo. Este é um problema central em diversas áreas da ciência da computação, como inteligência artificial, redes de computadores, otimização, e análise de dados. O objetivo da busca em grafos pode variar: em alguns casos, o problema é encontrar qualquer caminho que conecte o vértice inicial ao alvo, enquanto em outros, o objetivo é encontrar o caminho mais curto ou o caminho de menor custo, de acordo com uma função de peso associada às arestas.</p>
+
+    <h3>2.1. Caminhos Mais Curtos</h3>
+    <p>Encontrar o caminho mais curto em um grafo é um problema comum em diversas aplicações, como redes de comunicação e otimização de rotas. Quando se trata de grafos não ponderados, o algoritmo de Busca em Largura (BFS) é uma solução eficiente para encontrar o caminho mais curto entre dois vértices, já que explora os vértices camada por camada, assegurando que o primeiro caminho encontrado seja o de menor distância em termos de número de arestas.</p>
+    <p>Já para grafos ponderados, onde as arestas têm custos, o Algoritmo de Dijkstra é a escolha padrão, visto que explora os vértices de forma que, a cada passo, expande o vértice mais próximo da origem, levando em consideração os pesos das arestas.</p>
+    <p>No contexto de visualização, o processo de busca pode ser destacado visualmente, com o algoritmo mostrando como ele escolhe progressivamente os caminhos de menor custo. A visualização do caminho mais curto facilita o entendimento de como o algoritmo toma decisões e percorre o grafo.</p>
+
+    <h3>2.2. Componentes Conexos</h3>
+    <p>Um componente conexo é um subconjunto de vértices em que qualquer par de vértices está diretamente ou indiretamente conectado por um caminho. Em grafos não direcionados, os algoritmos de Busca em Largura (BFS) e Busca em Profundidade (DFS) são amplamente utilizados para identificar esses componentes.</p>
+    <p>Durante a execução desses algoritmos, todos os vértices acessíveis a partir de um vértice inicial são marcados, formando um componente conexo. Esse processo é repetido para cada vértice não visitado, resultando na divisão do grafo em seus componentes conexos.</p>
+    <p>Em grafos direcionados, o conceito é mais complexo e é abordado por meio de componentes fortemente conectados. Esses componentes podem ser encontrados utilizando algoritmos especializados, que aplicam uma busca em profundidade para identificar subconjuntos de vértices onde existe um caminho direcionado entre todos os pares de vértices do componente.</p>
+    <p>No contexto de visualização, a identificação de componentes conexos pode ser representada por destacar diferentes regiões do grafo, ajudando a entender como os vértices estão agrupados e interconectados.</p>
 
     <h2>3. Principais Algoritmos de Busca em Grafos</h2>
     <h3>3.1. Busca em Largura (BFS)</h3>
