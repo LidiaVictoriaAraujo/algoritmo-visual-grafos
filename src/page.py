@@ -17,10 +17,12 @@ class Busca:
             pass
 
 def page():
-    st.title('Trabalho final da disciplina de Algoritmos em Grafos')
-    st.write('Este é o trabalho de Grafos da disciplina de Algoritmos em Grafos. O algoritmo é implementado em Python e a interface gráfica é feita com o Streamlit.')
+    st.title('Algoritmo Visual de Grafos')
 
-    st.divider()
+    with open('docs/metodologia.html', 'r', encoding='utf-8') as f:
+        st.html(f.read())
+
+
     with open('docs/intro.html', 'r', encoding='utf-8') as f:
         st.html(f.read())
 
