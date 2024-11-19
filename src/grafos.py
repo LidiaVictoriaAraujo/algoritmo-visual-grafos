@@ -22,6 +22,19 @@ def make_grafo_manual(v,a,ladj, dir):
 
 def ler_html(g, dir):
     gvisual=Network(height=HEIGHT, width=WIDTH, directed=dir, notebook=False)
+    gvisual.set_options("""
+            var options = {
+            "nodes": {
+                "font": {
+                "size": 32,
+                "color": "#000000"
+                },
+                "scaling": {
+                "label": true
+                }
+            }
+            }
+            """)
     gvisual.from_nx(g)
     gvisual.write_html('temp/grafo.html')
     HtmlFile = open("temp/grafo.html", 'r', encoding='utf-8')

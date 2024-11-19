@@ -52,6 +52,19 @@ def duplicar_lista_ate_tamanho(lista, tamanho):
 
 def transforma_componentes(f, saidaTexto, grafo, pos):
     net = Network(cdn_resources='in_line')
+    net.set_options("""
+            var options = {
+            "nodes": {
+                "font": {
+                "size": 32,
+                "color": "#000000"
+                },
+                "scaling": {
+                "label": true
+                }
+            }
+            }
+            """)
     groups = []
     saidaTexto = saidaTexto.replace("(", "")
     saidaTexto = saidaTexto.replace(")", "")

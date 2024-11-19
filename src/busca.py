@@ -5,10 +5,27 @@ from IPython.core.display import display, HTML, clear_output
 
 import streamlit.components.v1 as components
 import streamlit as st
+import src.page as page
+import tempfile
 
 
 def create_visual_graph(graph, pos, path=None, visited_nodes=None, queue_nodes=None, final=False):
     net = Network(cdn_resources='in_line')
+    # Configurações para exibir os labels corretamente
+    net.set_options("""
+        var options = {
+        "nodes": {
+            "font": {
+            "size": 32,
+            "color": "#000000"
+            },
+            "scaling": {
+            "label": true
+            }
+        }
+        }
+        """)
+
     for node in graph.nodes():
         # Define as cores:
         # - Azul para o caminho final encontrado
@@ -23,7 +40,7 @@ def create_visual_graph(graph, pos, path=None, visited_nodes=None, queue_nodes=N
             elif node in path:
                 color = 'red'
             elif node in queue_nodes:
-                color = 'yellow'
+                color = 'purple'
             else:
                 color = 'gray'
 
@@ -35,7 +52,10 @@ def create_visual_graph(graph, pos, path=None, visited_nodes=None, queue_nodes=N
         net.add_edge(*edge)
 
     text = net.generate_html('grafo_busca.html', local=True)
-    components.html(text, height=600)
+
+    with page.placeholder:
+        page.placeholder.empty()
+        components.html(text, height=600)
 
 def bfs_visual(graph, pos, start, goal):
     visited = []  # Lista de nós já visitados
@@ -69,6 +89,8 @@ def bfs_visual(graph, pos, start, goal):
             else:
                 return None, visited
 
+            time.sleep(5)  # Pausa para ver a atualização da visualização
+
     return None, visited
 
 def dfs_visual(graph, pos, start, goal):
@@ -93,7 +115,7 @@ def dfs_visual(graph, pos, start, goal):
 
             # Atualiza a visualização do grafo a cada passo
             create_visual_graph(graph, pos, path=path, visited_nodes=visited, queue_nodes={neighbor for neighbor in neighbors if neighbor not in visited})
-            time.sleep(1)  # Pausa para ver a atualização da visualização
+            time.sleep(5) # Pausa para ver a atualização da visualização
 
     return None, visited  # Retorna None caso não encontre o caminho até o objetivo
 
@@ -143,5 +165,6 @@ def dijkstra_visual(graph, pos, start, goal):
                 distances[neighbor] = new_distance
                 predecessors[neighbor] = current_node
                 heapq.heappush(priority_queue, (new_distance, neighbor))
+        time.sleep(5)  # Pausa para ver a atualização da visualização
 
     return None, visited  # Retorna None se não encontrar caminho

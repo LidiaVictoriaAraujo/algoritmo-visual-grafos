@@ -7,6 +7,8 @@ from src.grafos import make_grafo_aleatorio, make_grafo_manual, ler_html
 from src.busca import bfs_visual, dfs_visual, dijkstra_visual
 from src.componentes import componentes
 
+placeholder = None
+
 class Busca:
         def __init__(self) -> None:
             self.inicio = None
@@ -17,12 +19,6 @@ class Busca:
 def page():
     st.title('Trabalho final da disciplina de Algoritmos em Grafos')
     st.write('Este é o trabalho de Grafos da disciplina de Algoritmos em Grafos. O algoritmo é implementado em Python e a interface gráfica é feita com o Streamlit.')
-
-    st.divider()
-
-    with open('docs/intro.html', 'r', encoding='utf-8') as f:
-        st.html(f.read())
-
 
 
 def modelagem():
@@ -67,6 +63,7 @@ def modelagem():
         st.write('Ainda não foi gerado um grafo')
 
 def busca():
+    global placeholder
     st.header('Buscar vértice no Grafo')
     st.write('Aqui você pode buscar um vértice no grafo gerado anteriormente. Digite o vértice que deseja buscar, o vértice inicial e selecione o tipo de busca que gostaria de fazer e clique em buscar.')
 
@@ -83,19 +80,13 @@ def busca():
             busca.final = fim
         tipo = st.selectbox('Selecione o tipo de busca', ['Busca em Largura', 'Busca em Profundidade'])
 
-        if tipo == 'Busca em Largura':
-            with open('docs/bfs_resumido.html', 'r', encoding='utf-8') as f:
-                st.html(f.read())
-        else:
-            with open('docs/dfs_resumido.html', 'r', encoding='utf-8') as f:
-                st.html(f.read())
-
         if st.button('Buscar', use_container_width=True):
             if busca.inicio < 0 or busca.inicio >= st.session_state.v:
                 st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
             elif busca.final < 0 or busca.final >= st.session_state.v:
                 st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
             else:
+                placeholder = st.empty()
                 if tipo == 'Busca em Largura':
                     pos = nx.spring_layout(st.session_state.grafo, seed=42)
                     path, visited_nodes = bfs_visual(st.session_state.grafo, pos, busca.inicio, busca.final)
@@ -142,6 +133,7 @@ def caminho():
             elif busca.final < 0 or busca.final >= st.session_state.v:
                 st.write('Vértice inválido. Digite um vértice entre 0 e ', str(st.session_state.v-1))
             else:
+                placeholder = st.empty()
                 st.write('Buscando caminho mínimo entre os vértices', inicio, 'e', fim)
                 pos = nx.spring_layout(st.session_state.grafo, seed=42)
                 path, visited_nodes = dijkstra_visual(st.session_state.grafo, pos, busca.inicio, busca.final)
